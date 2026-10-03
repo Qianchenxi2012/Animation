@@ -16,13 +16,85 @@
 
 <div id="shell">
 
+  <div class="top">
   <header>
     <div>
       <h1><span class="chem">CuSO₄</span> 与 <span class="chem">NaOH</span> 的反应</h1>
       <p class="subtitle">concentration &nbsp;/&nbsp; stoichiometry &nbsp;/&nbsp; precipitate</p>
     </div>
-    <div id="regime-tag">等待加入试剂</div>
+    <div class="head-right">
+      <button id="btn-info" aria-expanded="false" aria-controls="info">实验说明</button>
+      <div id="regime-tag">等待加入试剂</div>
+    </div>
   </header>
+
+  <section id="info" aria-label="实验说明">
+    <div class="info-grid">
+
+      <div class="info-col">
+        <div class="info-h">反应原理</div>
+        <p>硫酸铜溶液与氢氧化钠溶液反应，生成氢氧化铜蓝色沉淀。这是检验铜离子常用的反应。</p>
+        <div class="info-eq">
+          CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄
+        </div>
+        <p>碱不足时还会生成<b>碱式硫酸铜</b>；碱过量且浓度高时，沉淀继续溶解成深蓝色的四羟基合铜配离子：</p>
+        <div class="info-eq">
+          2CuSO₄ + 2NaOH → Cu₂(OH)₂SO₄↓ + Na₂SO₄<br>
+          Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻
+        </div>
+      </div>
+
+      <div class="info-col">
+        <div class="info-h">浓度决定产物</div>
+        <table class="info-tab">
+          <tr><th>n(OH⁻) : n(Cu²⁺)</th><th>产物</th><th>现象</th></tr>
+          <tr><td>&lt; 2</td><td>Cu₂(OH)₂SO₄</td><td>淡蓝色沉淀，Cu²⁺ 有剩余</td></tr>
+          <tr><td>= 2</td><td>Cu(OH)₂</td><td>蓝色沉淀，上清液无色</td></tr>
+          <tr><td>&gt; 2</td><td>Cu(OH)₂</td><td>上清液仍无色</td></tr>
+          <tr><td>&gt; 2 且浓</td><td>[Cu(OH)₄]²⁻</td><td>溶液变深蓝，固体减少</td></tr>
+        </table>
+        <p>关键在于：每摩尔铜做成 Cu(OH)₂ 要 2 mol OH⁻，做成碱式硫酸铜只要 1 mol（代价是占用 SO₄²⁻）。所以碱不够时产物就变了。</p>
+      </div>
+
+      <div class="info-col">
+        <div class="info-h">加热分解</div>
+        <div class="info-eq">
+          Cu(OH)₂ <span class="heat">Δ</span> → CuO↓ + H₂O
+        </div>
+        <p>点「加热」点着酒精灯，约 55 °C 以上蓝色沉淀开始分解，接近沸点时很快，最后变成<b>黑色 CuO</b>。碱式硫酸铜同样分解，但硫酸根留在溶液里。</p>
+        <p>此过程<b>不可逆</b>：关掉火也不会变回蓝色，需要「重新实验」才会重置。</p>
+      </div>
+
+      <div class="info-col">
+        <div class="info-h">怎么操作</div>
+        <p>先选一组典型配比，或自己拖动浓度与体积滑块。改动任意参数即从头重做一次。</p>
+        <ul class="info-ul">
+          <li><b>加入顺序</b>：先加 CuSO₄ 再加 NaOH（默认），或反过来。</li>
+          <li><b>摇动烧杯</b>：把已经沉降的沉淀重新扬起来。</li>
+          <li><b>加热</b>：开关酒精灯，观察沉淀由蓝转黑。</li>
+          <li><b>重新实验</b>：清空烧杯回到初始状态。</li>
+        </ul>
+      </div>
+
+      <div class="info-col">
+        <div class="info-h">观察什么</div>
+        <ul class="info-ul">
+          <li>滴加 NaOH 时，液流附近先出现<b>蓝色条带</b>，再慢慢散开。</li>
+          <li>沉淀是絮状胶体，会<b>缓缓沉降</b>，短时间内不会形成明显液面。</li>
+          <li>碱不足时沉淀偏<b>淡蓝绿色</b>，那是碱式硫酸铜，与 Cu(OH)₂ 的天蓝色不同。</li>
+          <li>下方的物质的量与判定随反应实时更新，可与画面互相印证。</li>
+        </ul>
+      </div>
+
+      <div class="info-col">
+        <div class="info-h">模型说明</div>
+        <p>这不是播放动画，而是一个逐格计算的场模型：烧杯分成 56 × 92 的网格，每格记录各物种浓度，每帧依次做平流、扩散、局部反应与沉降。物质的量由场直接统计，所以读数与画面始终一致，且严格守恒。</p>
+        <p class="info-caveat">溶液颜色用比尔-朗伯吸收加散射近似，吸收系数按观感调校，<b>并非从真实吸收光谱计算</b>；沉淀的絮状纹理、沉降速度同样做了视觉上的简化。</p>
+      </div>
+
+    </div>
+  </section>
+  </div>
 
   <aside>
 
@@ -89,12 +161,15 @@
 
     <div class="eq">
       CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄<br>
-      Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻
+      2CuSO₄ + 2NaOH → Cu₂(OH)₂SO₄↓ + Na₂SO₄<br>
+      Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻<br>
+      Cu(OH)₂ <span class="heat">Δ</span> → CuO↓ + H₂O
     </div>
 
     <div class="row">
       <button id="btn-replay">重新实验</button>
       <button id="btn-stir">摇动烧杯</button>
+      <button id="btn-heat">加热</button>
     </div>
 
     <div class="sec-title">改动任意参数即重新开始</div>
