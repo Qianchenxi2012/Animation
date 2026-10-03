@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CuSO₄ 与 NaOH — 浓度对反应的影响</title>
+<meta name="description" content="氢氧化钠与硫酸铜在不同浓度下的反应模拟：调节浓度与体积，观察蓝色氢氧化铜沉淀的生成、沉降，以及浓碱下生成深蓝色 [Cu(OH)₄]²⁻。纯前端，无依赖。">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#e9e5db">
+
+<!-- 相对路径，这样放在仓库子目录下也能直接打开 -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="shell">
+
+  <header>
+    <div>
+      <h1><span class="chem">CuSO₄</span> 与 <span class="chem">NaOH</span> 的反应</h1>
+      <p class="subtitle">concentration &nbsp;/&nbsp; stoichiometry &nbsp;/&nbsp; precipitate</p>
+    </div>
+    <div id="regime-tag">等待加入试剂</div>
+  </header>
+
+  <aside>
+
+    <div class="presets">
+      <div class="sec-title">典型配比</div>
+      <div class="row" style="margin-top:8px">
+        <button data-preset="eq">恰好反应 2∶1</button>
+        <button data-preset="base_lack">NaOH 不足</button>
+        <button data-preset="base_excess">NaOH 过量</button>
+        <button data-preset="concentrated">浓碱溶解</button>
+        <button data-preset="dilute">极稀溶液</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="chem-head">
+        <span class="name">硫酸铜溶液</span>
+        <span class="mono">CuSO₄ · aq</span>
+      </div>
+      <div class="field">
+        <label for="c-cu">
+          <span>浓度</span>
+          <span><span class="val" id="c-cu-v">1.00</span> <span class="unit">mol·L⁻¹</span></span>
+        </label>
+        <input type="range" id="c-cu" min="0" max="1000" value="797">
+      </div>
+      <div class="field">
+        <label for="v-cu">
+          <span>取用体积</span>
+          <span><span class="val" id="v-cu-v">40.0</span> <span class="unit">mL</span></span>
+        </label>
+        <input type="range" id="v-cu" min="5" max="80" step="0.5" value="40">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="chem-head">
+        <span class="name">氢氧化钠溶液</span>
+        <span class="mono">NaOH · aq</span>
+      </div>
+      <div class="field">
+        <label for="c-na">
+          <span>浓度</span>
+          <span><span class="val" id="c-na-v">2.00</span> <span class="unit">mol·L⁻¹</span></span>
+        </label>
+        <input type="range" id="c-na" min="0" max="1000" value="725">
+      </div>
+      <div class="field">
+        <label for="v-na">
+          <span>取用体积</span>
+          <span><span class="val" id="v-na-v">40.0</span> <span class="unit">mL</span></span>
+        </label>
+        <input type="range" id="v-na" min="5" max="80" step="0.5" value="40">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="sec-title">加入顺序</div>
+      <div class="seg">
+        <button data-order="cu_first" class="on">先 CuSO₄ 后 NaOH</button>
+        <button data-order="na_first">先 NaOH 后 CuSO₄</button>
+      </div>
+    </div>
+
+    <div class="eq">
+      CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄<br>
+      Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻
+    </div>
+
+    <div class="row">
+      <button id="btn-replay">重新实验</button>
+      <button id="btn-stir">摇动烧杯</button>
+    </div>
+
+    <div class="sec-title">改动任意参数即重新开始</div>
+
+  </aside>
+
+  <main>
+    <canvas id="scene"></canvas>
+  </main>
+
+  <footer>
+    <div class="panel">
+      <div class="numbers" id="numbers"></div>
+    </div>
+
+    <div class="panel">
+      <div id="gauge">
+        <div class="cap">
+          <span>投料比 n(NaOH) : n(CuSO₄)</span>
+          <span class="v" id="ratio-v">—</span>
+        </div>
+        <div class="gbar">
+          <div class="fill" id="gfill"></div>
+          <div class="mark" id="gmark" style="left:66.667%"></div>
+          <div class="marker" id="gmarker" style="left:0%"></div>
+        </div>
+        <div class="gscale">
+          <span>0.00</span><span>0.50</span><span>1.00</span><span>2.00（恰好）</span><span>3.00</span>
+        </div>
+      </div>
+      <div class="numbers" id="numbers-2"></div>
+    </div>
+
+    <div class="panel">
+      <div id="note">尚未开始。</div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
