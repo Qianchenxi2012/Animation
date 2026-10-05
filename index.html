@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -19,8 +19,8 @@
   <div class="top">
   <header>
     <div>
-      <h1><span class="chem">CuSO₄</span> 与 <span class="chem">NaOH</span> 的反应</h1>
-      <p class="subtitle">concentration &nbsp;/&nbsp; stoichiometry &nbsp;/&nbsp; precipitate</p>
+      <h1 id="sys-title">CuSO₄ 与 NaOH</h1>
+      <p class="subtitle" id="sys-sub">concentration &nbsp;/&nbsp; stoichiometry &nbsp;/&nbsp; precipitate</p>
     </div>
     <div class="head-right">
       <button id="btn-info" aria-expanded="false" aria-controls="info">实验说明</button>
@@ -33,36 +33,15 @@
 
       <div class="info-col">
         <div class="info-h">反应原理</div>
-        <p>硫酸铜溶液与氢氧化钠溶液反应，生成氢氧化铜蓝色沉淀。这是检验铜离子常用的反应。</p>
-        <div class="info-eq">
-          CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄
-        </div>
-        <p>碱不足时还会生成<b>碱式硫酸铜</b>；碱过量且浓度高时，沉淀继续溶解成深蓝色的四羟基合铜配离子：</p>
-        <div class="info-eq">
-          2CuSO₄ + 2NaOH → Cu₂(OH)₂SO₄↓ + Na₂SO₄<br>
-          Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻
-        </div>
+        <p id="sys-aim"></p>
+        <div class="info-eq" id="sys-eq"></div>
+        <p id="sys-extra"></p>
       </div>
 
       <div class="info-col">
         <div class="info-h">浓度决定产物</div>
-        <table class="info-tab">
-          <tr><th>n(OH⁻) : n(Cu²⁺)</th><th>产物</th><th>现象</th></tr>
-          <tr><td>&lt; 2</td><td>Cu₂(OH)₂SO₄</td><td>淡蓝色沉淀，Cu²⁺ 有剩余</td></tr>
-          <tr><td>= 2</td><td>Cu(OH)₂</td><td>蓝色沉淀，上清液无色</td></tr>
-          <tr><td>&gt; 2</td><td>Cu(OH)₂</td><td>上清液仍无色</td></tr>
-          <tr><td>&gt; 2 且浓</td><td>[Cu(OH)₄]²⁻</td><td>溶液变深蓝，固体减少</td></tr>
-        </table>
-        <p>关键在于：每摩尔铜做成 Cu(OH)₂ 要 2 mol OH⁻，做成碱式硫酸铜只要 1 mol（代价是占用 SO₄²⁻）。所以碱不够时产物就变了。</p>
-      </div>
-
-      <div class="info-col">
-        <div class="info-h">加热分解</div>
-        <div class="info-eq">
-          Cu(OH)₂ <span class="heat">Δ</span> → CuO↓ + H₂O
-        </div>
-        <p>点「加热」点着酒精灯，约 55 °C 以上蓝色沉淀开始分解，接近沸点时很快，最后变成<b>黑色 CuO</b>。碱式硫酸铜同样分解，但硫酸根留在溶液里。</p>
-        <p>此过程<b>不可逆</b>：关掉火也不会变回蓝色，需要「重新实验」才会重置。</p>
+        <table class="info-tab" id="sys-tab"></table>
+        <p id="sys-tabnote"></p>
       </div>
 
       <div class="info-col">
@@ -87,8 +66,14 @@
       </div>
 
       <div class="info-col">
+        <div class="info-h">微观示意</div>
+        <canvas id="molview" class="molview"></canvas>
+        <p class="mol-cap" id="mol-cap"></p>
+      </div>
+
+      <div class="info-col">
         <div class="info-h">模型说明</div>
-        <p>这不是播放动画，而是一个逐格计算的场模型：烧杯分成 56 × 92 的网格，每格记录各物种浓度，每帧依次做平流、扩散、局部反应与沉降。物质的量由场直接统计，所以读数与画面始终一致，且严格守恒。</p>
+        <p id="model-note">这不是播放动画，而是一个逐格计算的场模型：烧杯分成 56 × 92 的网格，每格记录各物种浓度，每帧依次做平流、扩散、局部反应与沉降。物质的量由场直接统计，所以读数与画面始终一致，且严格守恒。</p>
         <p class="info-caveat">溶液颜色用比尔-朗伯吸收加散射近似，吸收系数按观感调校，<b>并非从真实吸收光谱计算</b>；沉淀的絮状纹理、沉降速度同样做了视觉上的简化。</p>
       </div>
 
@@ -98,73 +83,25 @@
 
   <aside>
 
-    <div class="presets">
+    <div>
+      <div class="sec-title">选择实验</div>
+      <div class="row" id="sys-list" style="margin-top:8px"></div>
+      <p id="sys-blurb" class="blurb"></p>
+    </div>
+
+    <div>
       <div class="sec-title">典型配比</div>
-      <div class="row" style="margin-top:8px">
-        <button data-preset="eq">恰好反应 2∶1</button>
-        <button data-preset="base_lack">NaOH 不足</button>
-        <button data-preset="base_excess">NaOH 过量</button>
-        <button data-preset="concentrated">浓碱溶解</button>
-        <button data-preset="dilute">极稀溶液</button>
-      </div>
+      <div class="row" id="presets" style="margin-top:8px"></div>
     </div>
 
-    <div class="group">
-      <div class="chem-head">
-        <span class="name">硫酸铜溶液</span>
-        <span class="mono">CuSO₄ · aq</span>
-      </div>
-      <div class="field">
-        <label for="c-cu">
-          <span>浓度</span>
-          <span><span class="val" id="c-cu-v">1.00</span> <span class="unit">mol·L⁻¹</span></span>
-        </label>
-        <input type="range" id="c-cu" min="0" max="1000" value="797">
-      </div>
-      <div class="field">
-        <label for="v-cu">
-          <span>取用体积</span>
-          <span><span class="val" id="v-cu-v">40.0</span> <span class="unit">mL</span></span>
-        </label>
-        <input type="range" id="v-cu" min="5" max="80" step="0.5" value="40">
-      </div>
-    </div>
-
-    <div class="group">
-      <div class="chem-head">
-        <span class="name">氢氧化钠溶液</span>
-        <span class="mono">NaOH · aq</span>
-      </div>
-      <div class="field">
-        <label for="c-na">
-          <span>浓度</span>
-          <span><span class="val" id="c-na-v">2.00</span> <span class="unit">mol·L⁻¹</span></span>
-        </label>
-        <input type="range" id="c-na" min="0" max="1000" value="725">
-      </div>
-      <div class="field">
-        <label for="v-na">
-          <span>取用体积</span>
-          <span><span class="val" id="v-na-v">40.0</span> <span class="unit">mL</span></span>
-        </label>
-        <input type="range" id="v-na" min="5" max="80" step="0.5" value="40">
-      </div>
-    </div>
+    <div id="reagents"></div>
 
     <div class="group">
       <div class="sec-title">加入顺序</div>
-      <div class="seg">
-        <button data-order="cu_first" class="on">先 CuSO₄ 后 NaOH</button>
-        <button data-order="na_first">先 NaOH 后 CuSO₄</button>
-      </div>
+      <div class="seg" id="orders"></div>
     </div>
 
-    <div class="eq">
-      CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄<br>
-      2CuSO₄ + 2NaOH → Cu₂(OH)₂SO₄↓ + Na₂SO₄<br>
-      Cu(OH)₂ + 2NaOH ⇌ [Cu(OH)₄]²⁻<br>
-      Cu(OH)₂ <span class="heat">Δ</span> → CuO↓ + H₂O
-    </div>
+    <div class="eq" id="eq"></div>
 
     <div class="row">
       <button id="btn-replay">重新实验</button>
@@ -188,7 +125,7 @@
     <div class="panel">
       <div id="gauge">
         <div class="cap">
-          <span>投料比 n(NaOH) : n(CuSO₄)</span>
+          <span id="ratio-label">投料比</span>
           <span class="v" id="ratio-v">—</span>
         </div>
         <div class="gbar">
@@ -197,7 +134,7 @@
           <div class="marker" id="gmarker" style="left:0%"></div>
         </div>
         <div class="gscale">
-          <span>0.00</span><span>0.50</span><span>1.00</span><span>2.00（恰好）</span><span>3.00</span>
+          <span>0.00</span><span>0.50</span><span>1.00</span><span>2.00</span><span>3.00</span>
         </div>
       </div>
       <div class="numbers" id="numbers-2"></div>
@@ -210,6 +147,9 @@
 
 </div>
 
+<script src="systems.js"></script>
+<script src="engine.js"></script>
+<script src="molecule.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
